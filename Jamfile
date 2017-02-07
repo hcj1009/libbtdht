@@ -12,7 +12,8 @@ lib btdht : src/$(SOURCES).cpp
 	  <include>src
 	  <library>/btutils//btutils/<link>static
 	  <target-os>windows:<define>WIN32
-     <toolset>gcc:<cxxflags>-Wno-invalid-offsetof
+	  <toolset>gcc:<cxxflags>-Wno-invalid-offsetof
+	  <toolset>gcc:<cxxflags>-std=c++11
 	: # default build
 	  <link>static
 	: # usage-requirements
