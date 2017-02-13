@@ -1,7 +1,7 @@
-lib_LIBRARIES = \
-	libbtdht.a
+lib_LTLIBRARIES = \
+	libbtdht.la
 
-libbtdht_a_SOURCES = \
+libbtdht_la_SOURCES = \
 	blockallocator.h \
 	blockallocator.cpp \
 	Buffer.h \
@@ -15,9 +15,9 @@ libbtdht_a_SOURCES = \
 	ExternalIPCounter.h \
 	ExternalIPCounter.cpp
 
-libbtdht_a_LIBADD = \
-	../btutils/src/libbtutils.a
+libbtdht_la_LIBADD = \
+	../btutils/src/libbtutils.la
 
-libbtdht_a_CXXFLAGS = \
+libbtdht_la_CXXFLAGS = \
 	-std=c++11 \
 	-I../btutils/src

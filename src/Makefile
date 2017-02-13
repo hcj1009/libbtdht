@@ -76,11 +76,16 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+build_triplet = x86_64-unknown-linux-gnu
+host_triplet = x86_64-unknown-linux-gnu
 subdir = btdht/src
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/build-aux/depcomp
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -114,19 +119,20 @@ am__uninstall_files_from_dir = { \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
 am__installdirs = "$(DESTDIR)$(libdir)"
-LIBRARIES = $(lib_LIBRARIES)
-ARFLAGS = cru
-AM_V_AR = $(am__v_AR_$(V))
-am__v_AR_ = $(am__v_AR_$(AM_DEFAULT_VERBOSITY))
-am__v_AR_0 = @echo "  AR      " $@;
-am__v_AR_1 = 
-libbtdht_a_AR = $(AR) $(ARFLAGS)
-libbtdht_a_DEPENDENCIES = ../btutils/src/libbtutils.a
-am_libbtdht_a_OBJECTS = libbtdht_a-blockallocator.$(OBJEXT) \
-	libbtdht_a-crc32c.$(OBJEXT) libbtdht_a-dht.$(OBJEXT) \
-	libbtdht_a-DhtImpl.$(OBJEXT) libbtdht_a-DHTMessage.$(OBJEXT) \
-	libbtdht_a-ExternalIPCounter.$(OBJEXT)
-libbtdht_a_OBJECTS = $(am_libbtdht_a_OBJECTS)
+LTLIBRARIES = $(lib_LTLIBRARIES)
+libbtdht_la_DEPENDENCIES = ../btutils/src/libbtutils.la
+am_libbtdht_la_OBJECTS = libbtdht_la-blockallocator.lo \
+	libbtdht_la-crc32c.lo libbtdht_la-dht.lo \
+	libbtdht_la-DhtImpl.lo libbtdht_la-DHTMessage.lo \
+	libbtdht_la-ExternalIPCounter.lo
+libbtdht_la_OBJECTS = $(am_libbtdht_la_OBJECTS)
+AM_V_lt = $(am__v_lt_$(V))
+am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
+am__v_lt_0 = --silent
+am__v_lt_1 = 
+libbtdht_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(libbtdht_la_CXXFLAGS) \
+	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -143,37 +149,44 @@ DEFAULT_INCLUDES = -I.
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
-AM_V_lt = $(am__v_lt_$(V))
-am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
-am__v_lt_0 = --silent
-am__v_lt_1 = 
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CXXFLAGS) $(CXXFLAGS)
 AM_V_CXX = $(am__v_CXX_$(V))
 am__v_CXX_ = $(am__v_CXX_$(AM_DEFAULT_VERBOSITY))
 am__v_CXX_0 = @echo "  CXX     " $@;
 am__v_CXX_1 = 
 CXXLD = $(CXX)
-CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
-	-o $@
+CXXLINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_CXXLD = $(am__v_CXXLD_$(V))
 am__v_CXXLD_ = $(am__v_CXXLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CFLAGS) $(CFLAGS)
 AM_V_CC = $(am__v_CC_$(V))
 am__v_CC_ = $(am__v_CC_$(AM_DEFAULT_VERBOSITY))
 am__v_CC_0 = @echo "  CC      " $@;
 am__v_CC_1 = 
 CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_CCLD = $(am__v_CCLD_$(V))
 am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libbtdht_a_SOURCES)
-DIST_SOURCES = $(libbtdht_a_SOURCES)
+SOURCES = $(libbtdht_la_SOURCES)
+DIST_SOURCES = $(libbtdht_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -199,13 +212,13 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/nhuang/git/scout/build-aux/missing aclocal-1.13
+ACLOCAL = ${SHELL} /home/nhuang/Documents/scout-xplat/scout/build-aux/missing aclocal-1.13
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /home/nhuang/git/scout/build-aux/missing autoconf
-AUTOHEADER = ${SHELL} /home/nhuang/git/scout/build-aux/missing autoheader
-AUTOMAKE = ${SHELL} /home/nhuang/git/scout/build-aux/missing automake-1.13
+AUTOCONF = ${SHELL} /home/nhuang/Documents/scout-xplat/scout/build-aux/missing autoconf
+AUTOHEADER = ${SHELL} /home/nhuang/Documents/scout-xplat/scout/build-aux/missing autoheader
+AUTOMAKE = ${SHELL} /home/nhuang/Documents/scout-xplat/scout/build-aux/missing automake-1.13
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -213,29 +226,44 @@ CFLAGS = -g -O2
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
+CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"scout\" -DPACKAGE_TARNAME=\"scout\" -DPACKAGE_VERSION=\"0.0.0\" -DPACKAGE_STRING=\"scout\ 0.0.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"scout\" -DVERSION=\"0.0.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1
+DEFS = -DPACKAGE_NAME=\"scout\" -DPACKAGE_TARNAME=\"scout\" -DPACKAGE_VERSION=\"0.0.0\" -DPACKAGE_STRING=\"scout\ 0.0.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"scout\" -DVERSION=\"0.0.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\"
 DEPDIR = .deps
+DLLTOOL = false
+DSYMUTIL = 
+DUMPBIN = 
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
 EGREP = /usr/bin/grep -E
 EXEEXT = 
+FGREP = /usr/bin/grep -F
 GREP = /usr/bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
+LD = /usr/bin/ld -m elf_x86_64
 LDFLAGS = 
 LIBOBJS = 
 LIBS = 
+LIBTOOL = $(SHELL) $(top_builddir)/libtool
+LIPO = 
+LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/nhuang/git/scout/build-aux/missing makeinfo
+MAKEINFO = ${SHELL} /home/nhuang/Documents/scout-xplat/scout/build-aux/missing makeinfo
+MANIFEST_TOOL = :
 MKDIR_P = /usr/bin/mkdir -p
+NM = /usr/bin/nm -B
+NMEDIT = 
+OBJDUMP = objdump
 OBJEXT = o
+OTOOL = 
+OTOOL64 = 
 PACKAGE = scout
 PACKAGE_BUGREPORT = 
 PACKAGE_NAME = scout
@@ -245,35 +273,45 @@ PACKAGE_URL =
 PACKAGE_VERSION = 0.0.0
 PATH_SEPARATOR = :
 RANLIB = ranlib
+SED = /usr/bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
-STRIP = 
+STRIP = strip
 VERSION = 0.0.0
-abs_builddir = /home/nhuang/git/scout/btdht/src
-abs_srcdir = /home/nhuang/git/scout/btdht/src
-abs_top_builddir = /home/nhuang/git/scout
-abs_top_srcdir = /home/nhuang/git/scout
+abs_builddir = /home/nhuang/Documents/scout-xplat/scout/btdht/src
+abs_srcdir = /home/nhuang/Documents/scout-xplat/scout/btdht/src
+abs_top_builddir = /home/nhuang/Documents/scout-xplat/scout
+abs_top_srcdir = /home/nhuang/Documents/scout-xplat/scout
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
+ac_ct_DUMPBIN = 
 am__include = include
 am__leading_dot = .
 am__quote = 
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
+build = x86_64-unknown-linux-gnu
 build_alias = 
+build_cpu = x86_64
+build_os = linux-gnu
+build_vendor = unknown
 builddir = .
 datadir = ${datarootdir}
 datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
+host = x86_64-unknown-linux-gnu
 host_alias = 
+host_cpu = x86_64
+host_os = linux-gnu
+host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/nhuang/git/scout/build-aux/install-sh
+install_sh = ${SHELL} /home/nhuang/Documents/scout-xplat/scout/build-aux/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -293,10 +331,10 @@ target_alias =
 top_build_prefix = ../../
 top_builddir = ../..
 top_srcdir = ../..
-lib_LIBRARIES = \
-	libbtdht.a
+lib_LTLIBRARIES = \
+	libbtdht.la
 
-libbtdht_a_SOURCES = \
+libbtdht_la_SOURCES = \
 	blockallocator.h \
 	blockallocator.cpp \
 	Buffer.h \
@@ -310,17 +348,17 @@ libbtdht_a_SOURCES = \
 	ExternalIPCounter.h \
 	ExternalIPCounter.cpp
 
-libbtdht_a_LIBADD = \
-	../btutils/src/libbtutils.a
+libbtdht_la_LIBADD = \
+	../btutils/src/libbtutils.la
 
-libbtdht_a_CXXFLAGS = \
+libbtdht_la_CXXFLAGS = \
 	-std=c++11 \
 	-I../btutils/src
 
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cpp .o .obj
+.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -351,9 +389,10 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-install-libLIBRARIES: $(lib_LIBRARIES)
+
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
+	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
 	list2=; for p in $$list; do \
 	  if test -f $$p; then \
 	    list2="$$list2 $$p"; \
@@ -362,31 +401,32 @@ install-libLIBRARIES: $(lib_LIBRARIES)
 	test -z "$$list2" || { \
 	  echo " $(MKDIR_P) '$(DESTDIR)$(libdir)'"; \
 	  $(MKDIR_P) "$(DESTDIR)$(libdir)" || exit 1; \
-	  echo " $(INSTALL_DATA) $$list2 '$(DESTDIR)$(libdir)'"; \
-	  $(INSTALL_DATA) $$list2 "$(DESTDIR)$(libdir)" || exit $$?; }
-	@$(POST_INSTALL)
-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
+	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(libdir)'"; \
+	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(libdir)"; \
+	}
+
+uninstall-libLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
 	for p in $$list; do \
-	  if test -f $$p; then \
-	    $(am__strip_dir) \
-	    echo " ( cd '$(DESTDIR)$(libdir)' && $(RANLIB) $$f )"; \
-	    ( cd "$(DESTDIR)$(libdir)" && $(RANLIB) $$f ) || exit $$?; \
-	  else :; fi; \
+	  $(am__strip_dir) \
+	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$f'"; \
+	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$f"; \
 	done
 
-uninstall-libLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(libdir)'; $(am__uninstall_files_from_dir)
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+	@list='$(lib_LTLIBRARIES)'; \
+	locs=`for p in $$list; do echo $$p; done | \
+	      sed 's|^[^/]*$$|.|; s|/[^/]*$$||; s|$$|/so_locations|' | \
+	      sort -u`; \
+	test -z "$$locs" || { \
+	  echo rm -f $${locs}; \
+	  rm -f $${locs}; \
+	}
 
-clean-libLIBRARIES:
-	-test -z "$(lib_LIBRARIES)" || rm -f $(lib_LIBRARIES)
-
-libbtdht.a: $(libbtdht_a_OBJECTS) $(libbtdht_a_DEPENDENCIES) $(EXTRA_libbtdht_a_DEPENDENCIES) 
-	$(AM_V_at)-rm -f libbtdht.a
-	$(AM_V_AR)$(libbtdht_a_AR) libbtdht.a $(libbtdht_a_OBJECTS) $(libbtdht_a_LIBADD)
-	$(AM_V_at)$(RANLIB) libbtdht.a
+libbtdht.la: $(libbtdht_la_OBJECTS) $(libbtdht_la_DEPENDENCIES) $(EXTRA_libbtdht_la_DEPENDENCIES) 
+	$(AM_V_CXXLD)$(libbtdht_la_LINK) -rpath $(libdir) $(libbtdht_la_OBJECTS) $(libbtdht_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -394,12 +434,12 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/libbtdht_a-DHTMessage.Po
-include ./$(DEPDIR)/libbtdht_a-DhtImpl.Po
-include ./$(DEPDIR)/libbtdht_a-ExternalIPCounter.Po
-include ./$(DEPDIR)/libbtdht_a-blockallocator.Po
-include ./$(DEPDIR)/libbtdht_a-crc32c.Po
-include ./$(DEPDIR)/libbtdht_a-dht.Po
+include ./$(DEPDIR)/libbtdht_la-DHTMessage.Plo
+include ./$(DEPDIR)/libbtdht_la-DhtImpl.Plo
+include ./$(DEPDIR)/libbtdht_la-ExternalIPCounter.Plo
+include ./$(DEPDIR)/libbtdht_la-blockallocator.Plo
+include ./$(DEPDIR)/libbtdht_la-crc32c.Plo
+include ./$(DEPDIR)/libbtdht_la-dht.Plo
 
 .cpp.o:
 	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -415,89 +455,60 @@ include ./$(DEPDIR)/libbtdht_a-dht.Po
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-libbtdht_a-blockallocator.o: blockallocator.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_a-blockallocator.o -MD -MP -MF $(DEPDIR)/libbtdht_a-blockallocator.Tpo -c -o libbtdht_a-blockallocator.o `test -f 'blockallocator.cpp' || echo '$(srcdir)/'`blockallocator.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_a-blockallocator.Tpo $(DEPDIR)/libbtdht_a-blockallocator.Po
-#	$(AM_V_CXX)source='blockallocator.cpp' object='libbtdht_a-blockallocator.o' libtool=no \
+.cpp.lo:
+	$(AM_V_CXX)$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+#	$(AM_V_CXX)source='$<' object='$@' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_a-blockallocator.o `test -f 'blockallocator.cpp' || echo '$(srcdir)/'`blockallocator.cpp
+#	$(AM_V_CXX_no)$(LTCXXCOMPILE) -c -o $@ $<
 
-libbtdht_a-blockallocator.obj: blockallocator.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_a-blockallocator.obj -MD -MP -MF $(DEPDIR)/libbtdht_a-blockallocator.Tpo -c -o libbtdht_a-blockallocator.obj `if test -f 'blockallocator.cpp'; then $(CYGPATH_W) 'blockallocator.cpp'; else $(CYGPATH_W) '$(srcdir)/blockallocator.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_a-blockallocator.Tpo $(DEPDIR)/libbtdht_a-blockallocator.Po
-#	$(AM_V_CXX)source='blockallocator.cpp' object='libbtdht_a-blockallocator.obj' libtool=no \
+libbtdht_la-blockallocator.lo: blockallocator.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_la_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_la-blockallocator.lo -MD -MP -MF $(DEPDIR)/libbtdht_la-blockallocator.Tpo -c -o libbtdht_la-blockallocator.lo `test -f 'blockallocator.cpp' || echo '$(srcdir)/'`blockallocator.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_la-blockallocator.Tpo $(DEPDIR)/libbtdht_la-blockallocator.Plo
+#	$(AM_V_CXX)source='blockallocator.cpp' object='libbtdht_la-blockallocator.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_a-blockallocator.obj `if test -f 'blockallocator.cpp'; then $(CYGPATH_W) 'blockallocator.cpp'; else $(CYGPATH_W) '$(srcdir)/blockallocator.cpp'; fi`
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_la-blockallocator.lo `test -f 'blockallocator.cpp' || echo '$(srcdir)/'`blockallocator.cpp
 
-libbtdht_a-crc32c.o: crc32c.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_a-crc32c.o -MD -MP -MF $(DEPDIR)/libbtdht_a-crc32c.Tpo -c -o libbtdht_a-crc32c.o `test -f 'crc32c.cpp' || echo '$(srcdir)/'`crc32c.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_a-crc32c.Tpo $(DEPDIR)/libbtdht_a-crc32c.Po
-#	$(AM_V_CXX)source='crc32c.cpp' object='libbtdht_a-crc32c.o' libtool=no \
+libbtdht_la-crc32c.lo: crc32c.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_la_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_la-crc32c.lo -MD -MP -MF $(DEPDIR)/libbtdht_la-crc32c.Tpo -c -o libbtdht_la-crc32c.lo `test -f 'crc32c.cpp' || echo '$(srcdir)/'`crc32c.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_la-crc32c.Tpo $(DEPDIR)/libbtdht_la-crc32c.Plo
+#	$(AM_V_CXX)source='crc32c.cpp' object='libbtdht_la-crc32c.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_a-crc32c.o `test -f 'crc32c.cpp' || echo '$(srcdir)/'`crc32c.cpp
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_la-crc32c.lo `test -f 'crc32c.cpp' || echo '$(srcdir)/'`crc32c.cpp
 
-libbtdht_a-crc32c.obj: crc32c.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_a-crc32c.obj -MD -MP -MF $(DEPDIR)/libbtdht_a-crc32c.Tpo -c -o libbtdht_a-crc32c.obj `if test -f 'crc32c.cpp'; then $(CYGPATH_W) 'crc32c.cpp'; else $(CYGPATH_W) '$(srcdir)/crc32c.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_a-crc32c.Tpo $(DEPDIR)/libbtdht_a-crc32c.Po
-#	$(AM_V_CXX)source='crc32c.cpp' object='libbtdht_a-crc32c.obj' libtool=no \
+libbtdht_la-dht.lo: dht.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_la_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_la-dht.lo -MD -MP -MF $(DEPDIR)/libbtdht_la-dht.Tpo -c -o libbtdht_la-dht.lo `test -f 'dht.cpp' || echo '$(srcdir)/'`dht.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_la-dht.Tpo $(DEPDIR)/libbtdht_la-dht.Plo
+#	$(AM_V_CXX)source='dht.cpp' object='libbtdht_la-dht.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_a-crc32c.obj `if test -f 'crc32c.cpp'; then $(CYGPATH_W) 'crc32c.cpp'; else $(CYGPATH_W) '$(srcdir)/crc32c.cpp'; fi`
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_la-dht.lo `test -f 'dht.cpp' || echo '$(srcdir)/'`dht.cpp
 
-libbtdht_a-dht.o: dht.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_a-dht.o -MD -MP -MF $(DEPDIR)/libbtdht_a-dht.Tpo -c -o libbtdht_a-dht.o `test -f 'dht.cpp' || echo '$(srcdir)/'`dht.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_a-dht.Tpo $(DEPDIR)/libbtdht_a-dht.Po
-#	$(AM_V_CXX)source='dht.cpp' object='libbtdht_a-dht.o' libtool=no \
+libbtdht_la-DhtImpl.lo: DhtImpl.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_la_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_la-DhtImpl.lo -MD -MP -MF $(DEPDIR)/libbtdht_la-DhtImpl.Tpo -c -o libbtdht_la-DhtImpl.lo `test -f 'DhtImpl.cpp' || echo '$(srcdir)/'`DhtImpl.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_la-DhtImpl.Tpo $(DEPDIR)/libbtdht_la-DhtImpl.Plo
+#	$(AM_V_CXX)source='DhtImpl.cpp' object='libbtdht_la-DhtImpl.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_a-dht.o `test -f 'dht.cpp' || echo '$(srcdir)/'`dht.cpp
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_la-DhtImpl.lo `test -f 'DhtImpl.cpp' || echo '$(srcdir)/'`DhtImpl.cpp
 
-libbtdht_a-dht.obj: dht.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_a-dht.obj -MD -MP -MF $(DEPDIR)/libbtdht_a-dht.Tpo -c -o libbtdht_a-dht.obj `if test -f 'dht.cpp'; then $(CYGPATH_W) 'dht.cpp'; else $(CYGPATH_W) '$(srcdir)/dht.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_a-dht.Tpo $(DEPDIR)/libbtdht_a-dht.Po
-#	$(AM_V_CXX)source='dht.cpp' object='libbtdht_a-dht.obj' libtool=no \
+libbtdht_la-DHTMessage.lo: DHTMessage.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_la_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_la-DHTMessage.lo -MD -MP -MF $(DEPDIR)/libbtdht_la-DHTMessage.Tpo -c -o libbtdht_la-DHTMessage.lo `test -f 'DHTMessage.cpp' || echo '$(srcdir)/'`DHTMessage.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_la-DHTMessage.Tpo $(DEPDIR)/libbtdht_la-DHTMessage.Plo
+#	$(AM_V_CXX)source='DHTMessage.cpp' object='libbtdht_la-DHTMessage.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_a-dht.obj `if test -f 'dht.cpp'; then $(CYGPATH_W) 'dht.cpp'; else $(CYGPATH_W) '$(srcdir)/dht.cpp'; fi`
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_la-DHTMessage.lo `test -f 'DHTMessage.cpp' || echo '$(srcdir)/'`DHTMessage.cpp
 
-libbtdht_a-DhtImpl.o: DhtImpl.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_a-DhtImpl.o -MD -MP -MF $(DEPDIR)/libbtdht_a-DhtImpl.Tpo -c -o libbtdht_a-DhtImpl.o `test -f 'DhtImpl.cpp' || echo '$(srcdir)/'`DhtImpl.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_a-DhtImpl.Tpo $(DEPDIR)/libbtdht_a-DhtImpl.Po
-#	$(AM_V_CXX)source='DhtImpl.cpp' object='libbtdht_a-DhtImpl.o' libtool=no \
+libbtdht_la-ExternalIPCounter.lo: ExternalIPCounter.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_la_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_la-ExternalIPCounter.lo -MD -MP -MF $(DEPDIR)/libbtdht_la-ExternalIPCounter.Tpo -c -o libbtdht_la-ExternalIPCounter.lo `test -f 'ExternalIPCounter.cpp' || echo '$(srcdir)/'`ExternalIPCounter.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_la-ExternalIPCounter.Tpo $(DEPDIR)/libbtdht_la-ExternalIPCounter.Plo
+#	$(AM_V_CXX)source='ExternalIPCounter.cpp' object='libbtdht_la-ExternalIPCounter.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_a-DhtImpl.o `test -f 'DhtImpl.cpp' || echo '$(srcdir)/'`DhtImpl.cpp
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_la-ExternalIPCounter.lo `test -f 'ExternalIPCounter.cpp' || echo '$(srcdir)/'`ExternalIPCounter.cpp
 
-libbtdht_a-DhtImpl.obj: DhtImpl.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_a-DhtImpl.obj -MD -MP -MF $(DEPDIR)/libbtdht_a-DhtImpl.Tpo -c -o libbtdht_a-DhtImpl.obj `if test -f 'DhtImpl.cpp'; then $(CYGPATH_W) 'DhtImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/DhtImpl.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_a-DhtImpl.Tpo $(DEPDIR)/libbtdht_a-DhtImpl.Po
-#	$(AM_V_CXX)source='DhtImpl.cpp' object='libbtdht_a-DhtImpl.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_a-DhtImpl.obj `if test -f 'DhtImpl.cpp'; then $(CYGPATH_W) 'DhtImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/DhtImpl.cpp'; fi`
+mostlyclean-libtool:
+	-rm -f *.lo
 
-libbtdht_a-DHTMessage.o: DHTMessage.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_a-DHTMessage.o -MD -MP -MF $(DEPDIR)/libbtdht_a-DHTMessage.Tpo -c -o libbtdht_a-DHTMessage.o `test -f 'DHTMessage.cpp' || echo '$(srcdir)/'`DHTMessage.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_a-DHTMessage.Tpo $(DEPDIR)/libbtdht_a-DHTMessage.Po
-#	$(AM_V_CXX)source='DHTMessage.cpp' object='libbtdht_a-DHTMessage.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_a-DHTMessage.o `test -f 'DHTMessage.cpp' || echo '$(srcdir)/'`DHTMessage.cpp
-
-libbtdht_a-DHTMessage.obj: DHTMessage.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_a-DHTMessage.obj -MD -MP -MF $(DEPDIR)/libbtdht_a-DHTMessage.Tpo -c -o libbtdht_a-DHTMessage.obj `if test -f 'DHTMessage.cpp'; then $(CYGPATH_W) 'DHTMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/DHTMessage.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_a-DHTMessage.Tpo $(DEPDIR)/libbtdht_a-DHTMessage.Po
-#	$(AM_V_CXX)source='DHTMessage.cpp' object='libbtdht_a-DHTMessage.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_a-DHTMessage.obj `if test -f 'DHTMessage.cpp'; then $(CYGPATH_W) 'DHTMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/DHTMessage.cpp'; fi`
-
-libbtdht_a-ExternalIPCounter.o: ExternalIPCounter.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_a-ExternalIPCounter.o -MD -MP -MF $(DEPDIR)/libbtdht_a-ExternalIPCounter.Tpo -c -o libbtdht_a-ExternalIPCounter.o `test -f 'ExternalIPCounter.cpp' || echo '$(srcdir)/'`ExternalIPCounter.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_a-ExternalIPCounter.Tpo $(DEPDIR)/libbtdht_a-ExternalIPCounter.Po
-#	$(AM_V_CXX)source='ExternalIPCounter.cpp' object='libbtdht_a-ExternalIPCounter.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_a-ExternalIPCounter.o `test -f 'ExternalIPCounter.cpp' || echo '$(srcdir)/'`ExternalIPCounter.cpp
-
-libbtdht_a-ExternalIPCounter.obj: ExternalIPCounter.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -MT libbtdht_a-ExternalIPCounter.obj -MD -MP -MF $(DEPDIR)/libbtdht_a-ExternalIPCounter.Tpo -c -o libbtdht_a-ExternalIPCounter.obj `if test -f 'ExternalIPCounter.cpp'; then $(CYGPATH_W) 'ExternalIPCounter.cpp'; else $(CYGPATH_W) '$(srcdir)/ExternalIPCounter.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtdht_a-ExternalIPCounter.Tpo $(DEPDIR)/libbtdht_a-ExternalIPCounter.Po
-#	$(AM_V_CXX)source='ExternalIPCounter.cpp' object='libbtdht_a-ExternalIPCounter.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtdht_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtdht_a-ExternalIPCounter.obj `if test -f 'ExternalIPCounter.cpp'; then $(CYGPATH_W) 'ExternalIPCounter.cpp'; else $(CYGPATH_W) '$(srcdir)/ExternalIPCounter.cpp'; fi`
+clean-libtool:
+	-rm -rf .libs _libs
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -583,7 +594,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LIBRARIES)
+all-am: Makefile $(LTLIBRARIES)
 installdirs:
 	for dir in "$(DESTDIR)$(libdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
@@ -620,7 +631,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libLIBRARIES mostlyclean-am
+clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+	mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -646,7 +658,7 @@ install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am: install-libLIBRARIES
+install-exec-am: install-libLTLIBRARIES
 
 install-html: install-html-am
 
@@ -675,7 +687,8 @@ maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am
 
-mostlyclean-am: mostlyclean-compile mostlyclean-generic
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool
 
 pdf: pdf-am
 
@@ -685,22 +698,23 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-libLIBRARIES
+uninstall-am: uninstall-libLTLIBRARIES
 
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am check check-am clean clean-generic \
-	clean-libLIBRARIES cscopelist-am ctags ctags-am distclean \
-	distclean-compile distclean-generic distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-libLIBRARIES install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic pdf pdf-am ps ps-am \
-	tags tags-am uninstall uninstall-am uninstall-libLIBRARIES
+	clean-libLTLIBRARIES clean-libtool cscopelist-am ctags \
+	ctags-am distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-libLTLIBRARIES install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags tags-am uninstall uninstall-am uninstall-libLTLIBRARIES
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

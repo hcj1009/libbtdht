@@ -19,6 +19,7 @@ bin
 *.scan
 *.sdf
 *.status
+*.Po
 *.tar.*
 *~
 .DS_Store
